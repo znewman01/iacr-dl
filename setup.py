@@ -24,9 +24,13 @@ DESCRIPTION = "`iacr-dl` is a package for accessing the Cryptology ePrint Archiv
 here = os.path.abspath(os.path.dirname(__file__))
 
 
-# What packages are required for this module to be executed?
-with io.open(os.path.join(here, "requirements.txt"), encoding="utf-8") as f:
-    REQUIRED = f.read().splitlines()
+def read_requirements(fname):
+    with io.open(os.path.join(here, "requirements.txt"), encoding="utf-8") as f:
+        return f.read().splitlines()
+
+
+REQUIRED = read_requirements("requirements.txt")
+TEST_REQUIRED = read_requirements("requirements-test.txt")
 
 with io.open(os.path.join(here, "README"), encoding="utf-8") as f:
     LONG_DESCRIPTION = "\n" + f.read()
@@ -85,6 +89,7 @@ setup(
     url=URL,
     py_modules=["iacr"],
     install_requires=REQUIRED,
+    tests_require=TEST_REQUIRED,
     include_package_data=True,
     license="MIT",
     classifiers=[
