@@ -34,6 +34,21 @@ class ArticleTests(unittest.TestCase):
         )
         self.assertEqual(actual, expected)
 
+    # modified from https://ia.cr/2019/549
+    def test_parse_html_multi_author(self):
+        article = Article.parse_html(_get_html("multi-paragraph.html"))
+        self.assertEqual(
+            article.authors,
+            [
+                "Arka Rai Choudhuri",
+                "Pavel Hubacek",
+                "Chethan Kamath",
+                "Krzysztof Pietrzak",
+                "Alon Rosen",
+                "Guy N. Rothblum",
+            ],
+        )
+
     def test_pdf_link(self) -> None:
         article = Article("Title", ["Author"], "Abstract", [], "2000/123")
         self.assertEqual(article.pdf_link, "https://eprint.iacr.org/2000/123.pdf")

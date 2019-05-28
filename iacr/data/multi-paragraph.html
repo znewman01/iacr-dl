@@ -1,0 +1,50 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+<title>Cryptology ePrint Archive: Report 2019/549 - Finding a Nash Equilibrium Is No Easier Than Breaking Fiat-Shamir</title>
+<link rev="made" href="mailto:eprint-admin%40iacr.org" />
+<meta content="initial-scale=1, width=device-width" name="viewport" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body bgcolor="white">
+<h2>Cryptology ePrint Archive: Report 2019/549</h2><p />
+<p /><script type="text/javascript" 
+src="/javascript/mathjax-2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">  
+MathJax.Hub.Config({
+extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js"], 
+jax: ["input/TeX", "output/HTML-CSS"], 
+tex2jax: {
+inlineMath: [ ['$','$'], ["\\(","\\)"] ], 
+displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+}, 
+"HTML-CSS": { availableFonts: ["TeX"] }
+}); 
+</script>
+<b>Finding  a  Nash  Equilibrium  Is  No  Easier  Than  Breaking  Fiat-Shamir</b><p />
+<i>Arka  Rai  Choudhuri   and  Pavel  Hubacek   and  Chethan  Kamath   and  Krzysztof  Pietrzak   and  Alon  Rosen   and  Guy  N.  Rothblum</i><p />
+<b>Abstract: </b>The  Fiat-Shamir  heuristic  transforms  a  public-coin  interactive  proof  into  a  non-interactive  argument,  by  replacing  the  verifier  with  a  cryptographic  hash  function  that  is  applied  to  the  protocol’s  transcript.  Constructing  hash  functions  for  which  this  transformation  is  sound  is  a  central   and  long-standing  open  question  in  cryptography.
+<P>
+We  show  that  solving  the  End-of-Metered-Line  problem  is  no  easier  than  breaking  the  soundness  of  the  Fiat-Shamir  transformation  when  applied  to  the  sumcheck  protocol.  In  particular,  if  the  transformed  protocol  is  sound,  then  any  hard  problem  in #P  gives  rise  to  a  hard  distribution  in  the  class  CLS,  which  is  contained  in  PPAD.
+<P>
+Our  main  technical  contribution  is  a  stateful  incrementally  verifiable  procedure  that,  given  a  SAT  instance  over  n  variables,  counts  the  number  of  satisfying  assignments.  This  is  accomplished  via  an  exponential  sequence  of  small  steps,  each  computable  in  time  poly(n).  Incremental  verifiability  means  that  each  intermediate  state  includes  a  sumcheck-based  proof  of  its  correctness,   and  the  proof  can  be  updated   and  verified  in  time  poly(n).
+<P>
+Combining  our  construction  with  a  hash  family  proposed  by  Canetti  et  al.  [STOC 2019]  gives  rise  to  a  distribution  in  the  class  CLS,  which  is  provably  hard  under  the  assumption  that  any  one  of  a  class  of  fully  homomorphic  encryption (FHE)  schemes  has  almost-optimal  security  against  quasi-polynomial  time  adversaries,   and  under  the  additional  worst-case  assumption  that  there  is  no  polynomial  time  algorithm  for  counting  the  number  of  satisfying  assignments  for  formulas  over  a  polylogarithmic  number  of  variables.
+<p />
+<b>Category / Keywords: </b>foundations / TFNP, PPAD, Nash Equilibrium, Fiat-Shamir transformation<p />
+<b>Original Publication</b><b> (with major differences): </b>STOC 2019 
+<b><BR>DOI: </b><a href="https://dx.doi.org/10.1145/3313276.3316400">10.1145/3313276.3316400<b></a></b>
+<p />
+<b>Date: </b>received 22 May 2019<p />
+<b>Contact author: </b>achoud at cs jhu edu, hubacek@iuuk mff cuni cz, ckamath@ist ac at, pietrzak@ist ac at, alon rosen@idc ac il, rothblum@alum mit edu<p />
+<b>Available format(s): </b><a href="/2019/549.pdf">PDF</a>  | <a href="/eprint-bin/cite.pl?entry=2019/549">BibTeX Citation</a>
+<p />
+<b>Version: </b><a href="/2019/549/20190523:063722">20190523:063722</a> (<a href="/eprint-bin/versions.pl?entry=2019/549">All versions of this report</a>)
+
+<p />
+<b>Short URL: </b><a href='https://ia.cr/2019/549'>ia.cr/2019/549</a>
+<p /><hr />[ <A HREF="/">Cryptology ePrint archive</A> ]
+
+</body>
+</html>
