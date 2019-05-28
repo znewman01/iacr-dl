@@ -2,12 +2,78 @@
 
 import unittest
 
-from . import double
+from . import Article
 
 
-class TestSuite(unittest.TestCase):
-    def test_foo(self) -> None:
-        self.assertEqual(double(2), 4)
+# Test Case Wishlist
+# - paragraphs in abstract
+# - multiple authors
+
+# modified from https://ia.cr/2019/579
+HTML = """
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+<title>Cryptology ePrint Archive: Report 2019/579 - BlockQuick: Super-Light Client Protocol for Blockchain Validation on Constrained Devices</title>
+<link rev="made" href="mailto:eprint-admin%40iacr.org" />
+<meta content="initial-scale=1, width=device-width" name="viewport" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body bgcolor="white">
+<h2>Cryptology ePrint Archive: Report 2019/579</h2><p />
+<p /><script type="text/javascript" 
+src="/javascript/mathjax-2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">  
+MathJax.Hub.Config({
+extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js"], 
+jax: ["input/TeX", "output/HTML-CSS"], 
+tex2jax: {
+inlineMath: [ ['$','$'], ["\\(","\\)"] ], 
+displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+}, 
+"HTML-CSS": { availableFonts: ["TeX"] }
+}); 
+</script>
+<b>BlockQuick:  Super-Light  Client  Protocol  for  Blockchain</b><p />
+<i>Dominic  Letz</i><p />
+<b>Abstract: </b>Today  server  authentication  is  largely  handled  through  Public  Key
+Infrastructure (PKI)  in  both  the  private   and  the  public  sector.
+<p />
+<b>Category / Keywords: </b>cryptographic protocols / blockchain, proof of work<p />
+<b>Date: </b>received 28 May 2019<p />
+<b>Contact author: </b>dominicletz at exosite com<p />
+<b>Available format(s): </b><a href="/2019/579.pdf">PDF</a>  | <a href="/eprint-bin/cite.pl?entry=2019/579">BibTeX Citation</a>
+<p />
+<b>Version: </b><a href="/2019/579/20190528:070704">20190528:070704</a> (<a href="/eprint-bin/versions.pl?entry=2019/579">All versions of this report</a>)
+
+<p />
+<b>Short URL: </b><a href='https://ia.cr/2019/579'>ia.cr/2019/579</a>
+<p /><hr />[ <A HREF="/">Cryptology ePrint archive</A> ]
+
+</body>
+</html>
+"""
+
+
+class ArticleTests(unittest.TestCase):
+    def test_parse_html(self) -> None:
+        actual = Article.parse_html(HTML)
+        expected = Article(
+            "BlockQuick: Super-Light Client Protocol for Blockchain",
+            ["Dominic Letz"],
+            (
+                "Today server authentication is largely handled through Public Key "
+                "Infrastructure (PKI) in both the private and the public sector."
+            ),
+            ["cryptographic protocols / blockchain", "proof of work"],
+            "2019/579",
+        )
+        self.assertEqual(actual, expected)
+
+    def test_pdf_link(self) -> None:
+        article = Article("Title", ["Author"], "Abstract", [], "2000/123")
+        self.assertEqual(article.pdf_link, "https://eprint.iacr.org/2000/123.pdf")
 
 
 if __name__ == "__main__":
