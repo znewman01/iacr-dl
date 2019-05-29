@@ -31,7 +31,7 @@ class Article:
 
     @classmethod
     def parse_html(cls, html: str) -> "Article":
-        soup = BeautifulSoup(html, "html.parser")
+        soup = BeautifulSoup(html, "html5lib")
         title = _fix_spaces(soup.find("b").text)
         authors = _fix_spaces_list(soup.find("i").text.split(" and "))
         abstract = _fix_spaces(
