@@ -54,6 +54,18 @@ class Article:
         return cls(title, authors, abstract, keywords, id_)
 
 
+@attr.s(auto_attribs=True)
+class ArticleId:
+
+    id: str
+
+    @classmethod
+    def from_string(cls, id_: str) -> "ArticleId":
+        if not re.match(r"\d{4}/\d{3}$", id_):
+            raise ValueError(f"Expected article ID of the form '2009/123'. Got {id_}")
+        return cls(id_)
+
+
 def main() -> None:
     pass
 

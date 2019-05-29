@@ -4,8 +4,9 @@ import io
 import unittest
 from pathlib import Path
 
-from . import Article
+from parameterized import parameterized
 
+from . import Article, ArticleId
 
 TEST_DATA_DIR = Path(__file__).parent.absolute() / "data"
 
@@ -61,6 +62,20 @@ class ArticleTests(unittest.TestCase):
     def test_pdf_link(self) -> None:
         article = Article("Title", ["Author"], "Abstract", [], "2000/123")
         self.assertEqual(article.pdf_link, "https://eprint.iacr.org/2000/123.pdf")
+
+
+class ArticleIdTests(unittest.TestCase):
+    @parameterized.expand([("1990/000",), ("2000/123",), ("2020/999",)])
+    def test_validate_good(self, id_: str) -> None:
+        article_id = ArticleId.from_string(id_)
+        self.assertEqual(article_id.id, id_)
+
+    @parameterized.expand(
+        [("abcdef"), ("20020/123"), ("1990-000",), ("200/123",), ("2020/9999",)]
+    )
+    def test_validate_bad(self, id_: str) -> None:
+        with self.assertRaises(ValueError):
+            ArticleId.from_string(id_)
 
 
 if __name__ == "__main__":
