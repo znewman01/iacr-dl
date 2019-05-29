@@ -3,6 +3,7 @@ import argparse
 import functools
 import json
 import re
+import sys
 from typing import List
 
 import attr
@@ -105,9 +106,8 @@ def fetch_and_parse(argv: List[str]) -> str:
     return json.dumps(attr.asdict(article))
 
 
-def main() -> None:
-    pass
-
-
-if __name__ == "__main__":
-    main()
+def main(argv: List[str]) -> None:
+    try:
+        sys.stdout.write(fetch_and_parse(argv) + "\n")
+    except Exception as err:  # pylint: disable=broad-except
+        sys.stderr.write(f"Error: {err}")
