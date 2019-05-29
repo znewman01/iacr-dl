@@ -19,21 +19,23 @@ def _get_test_resource(fname):
         return f.read()
 
 
+BASIC_ARTICLE = Article(
+    "BlockQuick: Super-Light Client Protocol for Blockchain",
+    ["Dominic Letz"],
+    (
+        "Today server authentication is largely handled through Public Key "
+        "Infrastructure (PKI) in both the private and the public sector."
+    ),
+    ["cryptographic protocols / blockchain", "proof of work"],
+    "2019/579",
+)
+
+
 class ArticleTests(unittest.TestCase):
     # modified from https://ia.cr/2019/579
     def test_parse_html_basic(self) -> None:
         actual = Article.parse_html(_get_test_resource("basic.html"))
-        expected = Article(
-            "BlockQuick: Super-Light Client Protocol for Blockchain",
-            ["Dominic Letz"],
-            (
-                "Today server authentication is largely handled through Public Key "
-                "Infrastructure (PKI) in both the private and the public sector."
-            ),
-            ["cryptographic protocols / blockchain", "proof of work"],
-            "2019/579",
-        )
-        self.assertEqual(actual, expected)
+        self.assertEqual(actual, BASIC_ARTICLE)
 
     # modified from https://ia.cr/2019/549
     def test_parse_html_multi_author(self) -> None:
