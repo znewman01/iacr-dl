@@ -38,6 +38,10 @@ class ArticleTests(unittest.TestCase):
         actual = Article.parse_html(_get_test_resource("basic.html"))
         self.assertEqual(actual, BASIC_ARTICLE)
 
+    # modified from https://ia.cr/2019/579
+    def test_cite_basic(self) -> None:
+        self.assertEqual(BASIC_ARTICLE.bibtex, _get_test_resource("basic.bib"))
+
     # modified from https://ia.cr/2019/549
     def test_parse_html_multi_author(self) -> None:
         article = Article.parse_html(_get_test_resource("multi-paragraph.html"))
@@ -53,6 +57,10 @@ class ArticleTests(unittest.TestCase):
             ],
         )
 
+    def test_cite_multi_author(self) -> None:
+        article = Article.parse_html(_get_test_resource("multi-paragraph.html"))
+        self.assertEqual(article.bibtex, _get_test_resource("multi-paragraph.bib"))
+
     # modified from https://ia.cr/2019/549
     def test_parse_html_multi_paragraph(self) -> None:
         article = Article.parse_html(_get_test_resource("multi-paragraph.html"))
@@ -64,6 +72,11 @@ class ArticleTests(unittest.TestCase):
         article = Article.parse_html(_get_test_resource("multi-paragraph2.html"))
         expected_abstract = _get_test_resource("multi-paragraph2-abstract.txt").rstrip()
         self.assertEqual(article.abstract, expected_abstract)
+
+    # modified from https://ia.cr/2007/478
+    def test_cite_multi_paragraph2(self) -> None:
+        article = Article.parse_html(_get_test_resource("multi-paragraph2.html"))
+        self.assertEqual(article.bibtex, _get_test_resource("multi-paragraph2.bib"))
 
     def test_pdf_link(self) -> None:
         article = Article("Title", ["Author"], "Abstract", [], "2000/123")

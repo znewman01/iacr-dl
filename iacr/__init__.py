@@ -10,6 +10,8 @@ import attr
 import requests
 from bs4 import BeautifulSoup
 
+import textwrap
+
 BASE_URL = "https://eprint.iacr.org"
 
 
@@ -44,6 +46,23 @@ class Article:
     @property
     def pdf_link(self) -> str:
         return f"{BASE_URL}/{self.id}.pdf"
+
+    @property
+    def bibtex(self) -> str:
+        id_with_colons = self.id.replace("/", ":")
+        authors = " and ".join(self.authors)
+        year, _, _ = self.id.partition("/")
+        return textwrap.dedent(
+            f"""\
+            @misc{{cryptoeprint:{id_with_colons},
+                author = {{{authors}}},
+                title = {{{self.title}}},
+                howpublished = {{Cryptology ePrint Archive, Report {self.id}}},
+                year = {{{year}}},
+                note = {{\\url{{{BASE_URL}/{self.id}}}}},
+            }}
+            """
+        )
 
     @classmethod
     def parse_html(cls, html: str) -> "Article":
