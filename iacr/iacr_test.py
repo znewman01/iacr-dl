@@ -3,10 +3,11 @@
 import io
 import unittest
 from pathlib import Path
+from typing import List
 
 from parameterized import parameterized
 
-from . import Article, ArticleId
+from . import Article, ArticleId, parse_args
 
 TEST_DATA_DIR = Path(__file__).parent.absolute() / "data"
 
@@ -76,6 +77,17 @@ class ArticleIdTests(unittest.TestCase):
     def test_validate_bad(self, id_: str) -> None:
         with self.assertRaises(ValueError):
             ArticleId.from_string(id_)
+
+
+class IacrFetcherTests(unittest.TestCase):
+    @parameterized.expand([(["1990/000"],), (["2000/234"],)])
+    def test_parse_args_good(self, argv: List[str]) -> None:
+        parse_args(argv)
+
+    @parameterized.expand([(["1990/000", "extra"],), ([],), (["123/456"],)])
+    def test_parse_args_bad(self, argv: List[str]) -> None:
+        with self.assertRaises(SystemExit):
+            parse_args(argv)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import argparse
+import functools
 import re
 from typing import List
 
@@ -64,6 +66,29 @@ class ArticleId:
         if not re.match(r"\d{4}/\d{3}$", id_):
             raise ValueError(f"Expected article ID of the form '2009/123'. Got {id_}")
         return cls(id_)
+
+
+def _wrap_validator_for_argparse(func):
+    @functools.wraps(func)
+    def wrapped(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except ValueError as err:
+            raise argparse.ArgumentTypeError(str(err))
+
+    return wrapped
+
+
+def parse_args(argv: List[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Fetch and parse the metadata of a paper in the IACR ePrint archive"
+    )
+    parser.add_argument(
+        "article_id",
+        type=_wrap_validator_for_argparse(ArticleId.from_string),
+        help="The article ID. For example, 2009/123.",
+    )
+    return parser.parse_args(argv)
 
 
 def main() -> None:
