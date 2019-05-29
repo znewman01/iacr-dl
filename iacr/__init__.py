@@ -5,9 +5,10 @@ import re
 from typing import List
 
 import attr
+import requests
 from bs4 import BeautifulSoup
 
-BASE_URL = "https://eprint.iacr.org/"
+BASE_URL = "https://eprint.iacr.org"
 
 
 def _fix_spaces(text: str) -> str:
@@ -89,6 +90,12 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
         help="The article ID. For example, 2009/123.",
     )
     return parser.parse_args(argv)
+
+
+def fetch(article_id: ArticleId) -> str:
+    r = requests.get(f"{BASE_URL}/{article_id.id}")
+    r.raise_for_status()
+    return r.text
 
 
 def main() -> None:

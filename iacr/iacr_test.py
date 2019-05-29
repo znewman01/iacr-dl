@@ -5,9 +5,11 @@ import unittest
 from pathlib import Path
 from typing import List
 
+import requests
+import responses
 from parameterized import parameterized
 
-from . import Article, ArticleId, parse_args
+from . import Article, ArticleId, fetch, parse_args
 
 TEST_DATA_DIR = Path(__file__).parent.absolute() / "data"
 
@@ -88,6 +90,30 @@ class IacrFetcherTests(unittest.TestCase):
     def test_parse_args_bad(self, argv: List[str]) -> None:
         with self.assertRaises(SystemExit):
             parse_args(argv)
+
+    @responses.activate
+    def test_fetch_good(self) -> None:
+        article_id = ArticleId("2009/123")
+        responses.add(
+            responses.GET,
+            "https://eprint.iacr.org/2009/123",
+            body="<html />",
+            status=200,
+        )
+        html = fetch(article_id)
+        self.assertEqual(html, "<html />")
+
+    @responses.activate
+    def test_fetch_bad(self) -> None:
+        article_id = ArticleId("2009/123")
+        responses.add(
+            responses.GET,
+            "https://eprint.iacr.org/2009/123",
+            body="not found",
+            status=404,
+        )
+        with self.assertRaises(requests.exceptions.HTTPError):
+            fetch(article_id)
 
 
 if __name__ == "__main__":
