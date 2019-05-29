@@ -7,9 +7,6 @@ from pathlib import Path
 from . import Article
 
 
-# Test Case Wishlist
-# - paragraphs in abstract
-# - multiple authors
 TEST_DATA_DIR = Path(__file__).parent.absolute() / "data"
 
 
@@ -48,6 +45,18 @@ class ArticleTests(unittest.TestCase):
                 "Guy N. Rothblum",
             ],
         )
+
+    # modified from https://ia.cr/2019/549
+    def test_parse_html_multi_paragraph(self):
+        article = Article.parse_html(_get_test_resource("multi-paragraph.html"))
+        expected_abstract = _get_test_resource("multi-paragraph-abstract.txt").rstrip()
+        self.assertEqual(article.abstract, expected_abstract)
+
+    # modified from https://ia.cr/2007/478
+    def test_parse_html_multi_paragraph2(self):
+        article = Article.parse_html(_get_test_resource("multi-paragraph2.html"))
+        expected_abstract = _get_test_resource("multi-paragraph2-abstract.txt").rstrip()
+        self.assertEqual(article.abstract, expected_abstract)
 
     def test_pdf_link(self) -> None:
         article = Article("Title", ["Author"], "Abstract", [], "2000/123")
