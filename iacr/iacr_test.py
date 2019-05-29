@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import io
+import json
 import unittest
 from pathlib import Path
 from typing import List
@@ -9,7 +10,7 @@ import requests
 import responses
 from parameterized import parameterized
 
-from . import Article, ArticleId, fetch, parse_args
+from . import Article, ArticleId, fetch, fetch_and_parse, parse_args
 
 TEST_DATA_DIR = Path(__file__).parent.absolute() / "data"
 
@@ -116,6 +117,31 @@ class IacrFetcherTests(unittest.TestCase):
         )
         with self.assertRaises(requests.exceptions.HTTPError):
             fetch(article_id)
+
+    @responses.activate
+    def test_fetch_and_parse_good(self) -> None:
+        responses.add(
+            responses.GET,
+            "https://eprint.iacr.org/2009/123",
+            body=_get_test_resource("basic.html"),
+            status=200,
+        )
+
+        json_str = fetch_and_parse(["2009/123"])
+
+        parsed_article = Article(**json.loads(json_str))
+        self.assertEqual(parsed_article, BASIC_ARTICLE)
+
+    @responses.activate
+    def test_fetch_and_parse_bad(self) -> None:
+        responses.add(
+            responses.GET,
+            "https://eprint.iacr.org/2009/123",
+            body="not found",
+            status=404,
+        )
+        with self.assertRaises(requests.exceptions.HTTPError):
+            fetch_and_parse(["2009/123"])
 
 
 if __name__ == "__main__":

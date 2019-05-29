@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import argparse
 import functools
+import json
 import re
 from typing import List
 
@@ -41,7 +42,7 @@ class Article:
 
     @property
     def pdf_link(self) -> str:
-        return BASE_URL + f"{self.id}.pdf"
+        return f"{BASE_URL}/{self.id}.pdf"
 
     @classmethod
     def parse_html(cls, html: str) -> "Article":
@@ -96,6 +97,12 @@ def fetch(article_id: ArticleId) -> str:
     r = requests.get(f"{BASE_URL}/{article_id.id}")
     r.raise_for_status()
     return r.text
+
+
+def fetch_and_parse(argv: List[str]) -> str:
+    args = parse_args(argv)
+    article = Article.parse_html(fetch(args.article_id))
+    return json.dumps(attr.asdict(article))
 
 
 def main() -> None:
