@@ -42,6 +42,18 @@ class ArticleTests(unittest.TestCase):
     def test_cite_basic(self) -> None:
         self.assertEqual(BASIC_ARTICLE.bibtex, _get_test_resource("basic.bib"))
 
+    # modified from https://ia.cr/2019/579
+    def test_to_dict_basic(self) -> None:
+        res = BASIC_ARTICLE.to_dict()
+        self.assertEqual(res.pop("title"), BASIC_ARTICLE.title)
+        self.assertEqual(res.pop("authors"), BASIC_ARTICLE.authors)
+        self.assertEqual(res.pop("abstract"), BASIC_ARTICLE.abstract)
+        self.assertEqual(res.pop("keywords"), BASIC_ARTICLE.keywords)
+        self.assertEqual(res.pop("id"), BASIC_ARTICLE.id)
+        self.assertEqual(res.pop("bibtex"), BASIC_ARTICLE.bibtex)
+        self.assertEqual(res.pop("pdf_link"), BASIC_ARTICLE.pdf_link)
+        self.assertFalse(res)  # no extra keys
+
     # modified from https://ia.cr/2019/549
     def test_parse_html_multi_author(self) -> None:
         article = Article.parse_html(_get_test_resource("multi-paragraph.html"))
@@ -142,7 +154,7 @@ class IacrFetcherTests(unittest.TestCase):
 
         json_str = fetch_and_parse(["2009/123"])
 
-        parsed_article = Article(**json.loads(json_str))
+        parsed_article = Article.from_dict(json.loads(json_str))
         self.assertEqual(parsed_article, BASIC_ARTICLE)
 
     @responses.activate

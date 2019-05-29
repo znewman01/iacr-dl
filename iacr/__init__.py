@@ -4,13 +4,12 @@ import functools
 import json
 import re
 import sys
-from typing import List
+import textwrap
+from typing import Dict, List, Union
 
 import attr
 import requests
 from bs4 import BeautifulSoup
-
-import textwrap
 
 BASE_URL = "https://eprint.iacr.org"
 
@@ -77,6 +76,19 @@ class Article:
         _, _, id_ = short_url.partition("/")
         return cls(title, authors, abstract, keywords, id_)
 
+    def to_dict(self) -> Dict[str, Union[str, List[str]]]:
+        res = attr.asdict(self)
+        res["bibtex"] = self.bibtex
+        res["pdf_link"] = self.pdf_link
+        return res
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Union[str, List[str]]]) -> "Article":
+        data = data.copy()
+        data.pop("bibtex")
+        data.pop("pdf_link")
+        return cls(**data)
+
 
 @attr.s(auto_attribs=True)
 class ArticleId:
@@ -122,7 +134,7 @@ def fetch(article_id: ArticleId) -> str:
 def fetch_and_parse(argv: List[str]) -> str:
     args = parse_args(argv)
     article = Article.parse_html(fetch(args.article_id))
-    return json.dumps(attr.asdict(article))
+    return json.dumps(article.to_dict())
 
 
 def main(argv: List[str]) -> None:
