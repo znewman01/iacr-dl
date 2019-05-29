@@ -12,11 +12,11 @@ def _fix_spaces(text: str) -> str:
     return re.sub("  +", " ", text).strip()
 
 
-def _fix_spaces_list(texts: List[str]):
+def _fix_spaces_list(texts: List[str]) -> List[str]:
     return list(map(_fix_spaces, texts))
 
 
-def _parse_abstract(soup):
+def _parse_abstract(soup: BeautifulSoup) -> str:
     abstract_paras = []
     first_paragraph = soup.find("b", text="Abstract: ").next_sibling
     abstract_paras.append(str(first_paragraph).replace("\n", " "))
@@ -54,7 +54,7 @@ class Article:
         return cls(title, authors, abstract, keywords, id_)
 
 
-def main() -> int:
+def main() -> None:
     pass
 
 
