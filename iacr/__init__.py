@@ -33,6 +33,13 @@ def _parse_abstract(soup: BeautifulSoup) -> str:
     return "\n\n".join(_fix_spaces_list(abstract_paras))
 
 
+def _parse_keywords(soup: BeautifulSoup) -> List[str]:
+    keywords_elem = soup.find("b", text="Category / Keywords: ").next_sibling
+    if not keywords_elem:
+        return []
+    return _fix_spaces_list(keywords_elem.split(","))
+
+
 @attr.s(auto_attribs=True)
 class Article:
 
@@ -68,9 +75,7 @@ class Article:
         soup = BeautifulSoup(html, "html5lib")
         title = _fix_spaces(soup.find("b").text)
         authors = _fix_spaces_list(soup.find("i").text.split(" and "))
-        keywords = _fix_spaces_list(
-            soup.find("b", text="Category / Keywords: ").next_sibling.split(",")
-        )
+        keywords = _parse_keywords(soup)
         abstract = _parse_abstract(soup)
         short_url = soup.find("b", text="Short URL: ").next_sibling.text
         _, _, id_ = short_url.partition("/")

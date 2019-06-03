@@ -90,6 +90,10 @@ class ArticleTests(unittest.TestCase):
         article = Article.parse_html(_get_test_resource("multi-paragraph2.html"))
         self.assertEqual(article.bibtex, _get_test_resource("multi-paragraph2.bib"))
 
+    def test_parse_html_no_keywords(self) -> None:
+        actual = Article.parse_html(_get_test_resource("no-keywords.html"))
+        self.assertEqual(actual.keywords, [])
+
     def test_pdf_link(self) -> None:
         article = Article("Title", ["Author"], "Abstract", [], "2000/123")
         self.assertEqual(article.pdf_link, "https://eprint.iacr.org/2000/123.pdf")
