@@ -111,13 +111,13 @@ def _make_test_cases(ids: List[str]) -> List[Tuple[str, str]]:
 
 
 class ArticleIdTests(unittest.TestCase):
-    @parameterized.expand(_make_test_cases(["1990/000", "2000/123", "2020/999"]))
+    @parameterized.expand(_make_test_cases(["1990/000", "2000/123", "2020/9999"]))
     def test_validate_good(self, id_string: str, id_: str) -> None:
         article_id = ArticleId.from_string(id_string)
         self.assertEqual(article_id.id, id_)
 
     @parameterized.expand(
-        _make_test_cases(["abcdef", "20020/123", "1990-000", "200/123", "2020/9999"])
+        _make_test_cases(["abcdef", "20020/123", "1990-000", "200/123", "2019/0123"])
     )
     def test_validate_bad(self, id_string: str, id_: str) -> None:
         del id_  # unused in test_validate_bad
