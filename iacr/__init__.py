@@ -102,9 +102,17 @@ class ArticleId:
 
     @classmethod
     def from_string(cls, id_: str) -> "ArticleId":
-        if not re.match(r"\d{4}/\d{3}$", id_):
-            raise ValueError(f"Expected article ID of the form '2009/123'. Got {id_}")
-        return cls(id_)
+        match = re.match((
+            r"(?:"
+            r"(?P<scheme>(?:http://)|(?:https://))?"
+            r"(?P<host>(?:ia.cr/)|(?:eprint.iacr.org/))"
+            r")?"
+            r"(?P<id>\d{4}/\d{3})$"), id_)
+        if not match:
+            raise ValueError("Expected article ID of the form '2009/123', "
+                             "'eprint.iacr.org/2009/123', or 'https://ia.cr/2009/123'."
+                             f"Got {id_}")
+        return cls(match.group("id"))
 
 
 def _wrap_validator_for_argparse(func):

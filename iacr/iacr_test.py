@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import io
+import itertools
 import json
 import unittest
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 import requests
 import responses
@@ -99,18 +100,29 @@ class ArticleTests(unittest.TestCase):
         self.assertEqual(article.pdf_link, "https://eprint.iacr.org/2000/123.pdf")
 
 
+def _make_identifier_variations(id_: str) -> List[str]:
+    _PREFIXES = ["http://", "https://", ""]
+    _HOSTS = ["ia.cr", "eprint.iacr.org"]
+    return [f"{prefix}{host}/{id_}" for host in _HOSTS for prefix in _PREFIXES] + [id_]
+
+
+def _make_test_cases(ids: List[str]) -> List[Tuple[str, str]]:
+    return [(v, id_) for id_ in ids for v in _make_identifier_variations(id_)]
+
+
 class ArticleIdTests(unittest.TestCase):
-    @parameterized.expand([("1990/000",), ("2000/123",), ("2020/999",)])
-    def test_validate_good(self, id_: str) -> None:
-        article_id = ArticleId.from_string(id_)
+    @parameterized.expand(_make_test_cases(["1990/000", "2000/123", "2020/999"]))
+    def test_validate_good(self, id_string: str, id_: str) -> None:
+        article_id = ArticleId.from_string(id_string)
         self.assertEqual(article_id.id, id_)
 
     @parameterized.expand(
-        [("abcdef"), ("20020/123"), ("1990-000",), ("200/123",), ("2020/9999",)]
+        _make_test_cases(["abcdef", "20020/123", "1990-000", "200/123", "2020/9999"])
     )
-    def test_validate_bad(self, id_: str) -> None:
+    def test_validate_bad(self, id_string: str, id_: str) -> None:
+        del id_  # unused in test_validate_bad
         with self.assertRaises(ValueError):
-            ArticleId.from_string(id_)
+            ArticleId.from_string(id_string)
 
 
 class IacrFetcherTests(unittest.TestCase):
