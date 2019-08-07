@@ -51,7 +51,7 @@ class Article:
 
     @property
     def pdf_link(self) -> str:
-        return f"{BASE_URL}/{self.id}.pdf"
+        return "{BASE_URL}/{self.id}.pdf".format(BASE_URL=BASE_URL, self=self)
 
     @property
     def bibtex(self) -> str:
@@ -59,7 +59,7 @@ class Article:
         authors = " and ".join(self.authors)
         year, _, _ = self.id.partition("/")
         return textwrap.dedent(
-            f"""\
+            """\
             @misc{{cryptoeprint:{id_with_colons},
                 author = {{{authors}}},
                 title = {{{self.title}}},
@@ -67,7 +67,13 @@ class Article:
                 year = {{{year}}},
                 note = {{\\url{{{BASE_URL}/{self.id}}}}},
             }}
-            """
+            """.format(
+                id_with_colons=id_with_colons,
+                authors=authors,
+                self=self,
+                year=year,
+                BASE_URL=BASE_URL,
+            )
         )
 
     @classmethod
@@ -114,9 +120,11 @@ class ArticleId:
         )  # "2019/1111" good, "2019/0111" bad
         if not match:
             raise ValueError(
-                "Expected article ID of the form '2009/123', "
-                "'eprint.iacr.org/2009/123', or 'https://ia.cr/2009/123'."
-                f"Got {id_}"
+                (
+                    "Expected article ID of the form '2009/123', "
+                    "'eprint.iacr.org/2009/123', or 'https://ia.cr/2009/123'."
+                    "Got {id_}"
+                ).format(id_=id_)
             )
         return cls(match.group("id"))
 
@@ -145,7 +153,9 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
 
 
 def fetch(article_id: ArticleId) -> str:
-    r = requests.get(f"{BASE_URL}/{article_id.id}")
+    r = requests.get(
+        "{BASE_URL}/{article_id.id}".format(BASE_URL=BASE_URL, article_id=article_id)
+    )
     r.raise_for_status()
     return r.text
 
@@ -160,4 +170,4 @@ def main(argv: List[str]) -> None:
     try:
         sys.stdout.write(fetch_and_parse(argv) + "\n")
     except Exception as err:  # pylint: disable=broad-except
-        sys.stderr.write(f"Error: {err}")
+        sys.stderr.write("Error: {err}".format(err=err))

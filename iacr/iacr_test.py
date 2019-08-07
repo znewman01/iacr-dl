@@ -103,7 +103,9 @@ class ArticleTests(unittest.TestCase):
 def _make_identifier_variations(id_: str) -> List[str]:
     _PREFIXES = ["http://", "https://", ""]
     _HOSTS = ["ia.cr", "eprint.iacr.org"]
-    return [f"{prefix}{host}/{id_}" for host in _HOSTS for prefix in _PREFIXES] + [id_]
+    return [
+        "{}{}/{}".format(prefix, host, id_) for host in _HOSTS for prefix in _PREFIXES
+    ] + [id_]
 
 
 def _make_test_cases(ids: List[str]) -> List[Tuple[str, str]]:
