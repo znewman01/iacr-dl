@@ -17,7 +17,7 @@ TEST_DATA_DIR = Path(__file__).parent.absolute() / "data"
 
 
 def _get_test_resource(fname):
-    with open(TEST_DATA_DIR / fname) as f:
+    with (TEST_DATA_DIR / fname).open() as f:
         return f.read()
 
 
