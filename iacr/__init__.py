@@ -102,16 +102,22 @@ class ArticleId:
 
     @classmethod
     def from_string(cls, id_: str) -> "ArticleId":
-        match = re.match((
-            r"(?:"
-            r"(?P<scheme>(?:http://)|(?:https://))?"
-            r"(?P<host>(?:ia.cr/)|(?:eprint.iacr.org/))"
-            r")?"
-            r"(?P<id>\d{4}/[1-9]?\d{3})$"), id_)  # "2019/1111" good, "2019/0111" bad
+        match = re.match(
+            (
+                r"(?:"
+                r"(?P<scheme>(?:http://)|(?:https://))?"
+                r"(?P<host>(?:ia.cr/)|(?:eprint.iacr.org/))"
+                r")?"
+                r"(?P<id>\d{4}/[1-9]?\d{3})$"
+            ),
+            id_,
+        )  # "2019/1111" good, "2019/0111" bad
         if not match:
-            raise ValueError("Expected article ID of the form '2009/123', "
-                             "'eprint.iacr.org/2009/123', or 'https://ia.cr/2009/123'."
-                             f"Got {id_}")
+            raise ValueError(
+                "Expected article ID of the form '2009/123', "
+                "'eprint.iacr.org/2009/123', or 'https://ia.cr/2009/123'."
+                f"Got {id_}"
+            )
         return cls(match.group("id"))
 
 
