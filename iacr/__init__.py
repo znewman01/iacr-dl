@@ -40,14 +40,14 @@ def _parse_keywords(soup: BeautifulSoup) -> List[str]:
     return _fix_spaces_list(keywords_elem.split(","))
 
 
-@attr.s(auto_attribs=True)
+@attr.s
 class Article:
 
-    title: str
-    authors: List[str]
-    abstract: str
-    keywords: List[str]
-    id: str
+    title = attr.ib(type=str)
+    authors = attr.ib(type=List[str])
+    abstract = attr.ib(type=str)
+    keywords = attr.ib(type=List[str])
+    id = attr.ib(type=str)
 
     @property
     def pdf_link(self) -> str:
@@ -95,10 +95,10 @@ class Article:
         return cls(**data)
 
 
-@attr.s(auto_attribs=True)
+@attr.s
 class ArticleId:
 
-    id: str
+    id = attr.ib(type=str)
 
     @classmethod
     def from_string(cls, id_: str) -> "ArticleId":
