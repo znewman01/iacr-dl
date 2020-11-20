@@ -13,7 +13,7 @@ from setuptools import find_packages, setup, Command
 
 # Package meta-data.
 NAME = "iacr-dl"
-URL = "https://github.com/zjn/iacr-dl"
+URL = "https://github.com/znewman01/iacr-dl"
 EMAIL = "znewman01@gmail.com"
 AUTHOR = "Zachary Newman"
 REQUIRES_PYTHON = ">=3.6.0"
@@ -32,7 +32,7 @@ def read_requirements(fname):
 REQUIRED = read_requirements("requirements.txt")
 TEST_REQUIRED = read_requirements("requirements-test.txt")
 
-with io.open(os.path.join(here, "README"), encoding="utf-8") as f:
+with io.open(os.path.join(here, "README.md"), encoding="utf-8") as f:
     LONG_DESCRIPTION = "\n" + f.read()
 
 # Load the package's __version__.py module as a dictionary.
