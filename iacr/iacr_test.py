@@ -3,7 +3,9 @@
 import io
 import itertools
 import json
+import pkg_resources
 import unittest
+
 from pathlib import Path
 from typing import List, Tuple
 
@@ -17,7 +19,7 @@ TEST_DATA_DIR = Path(__file__).parent.absolute() / "data"
 
 
 def _get_test_resource(fname):
-    with (TEST_DATA_DIR / fname).open() as f:
+    with open(pkg_resources.resource_filename("iacr.data", fname)) as f:
         return f.read()
 
 
