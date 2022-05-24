@@ -1,3 +1,5 @@
+# This should be obsolete due to the new eprint.iacr.org rewrite!
+
 `iacr-dl` is a package for accessing the Cryptology ePrint Archive.
 
 The ePrint Archive is run by the International Association for Cryptologic
